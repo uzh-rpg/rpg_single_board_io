@@ -1,8 +1,8 @@
 GPIO Library
 ============
 
-Use with odroid
----------------
+Use with odroid XU4
+-------------------
 By default, GPIO pins need to be exported with
 `echo $PIN_NUMBER > /sys/class/gpio/export`
 which is taken care by this library. However, the newly exported GPIO pins
@@ -19,3 +19,8 @@ SUBSYSTEM=="gpio", KERNEL=="gpio*", ACTION=="add", PROGRAM="/bin/sh -c 'chown ro
 
 For the changes to take effect, either reboot the odroid or run
 `udevadm control --reload-rules`
+
+
+Use with Odroid U3
+------------------
+TODO
