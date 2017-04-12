@@ -16,11 +16,13 @@
 
 namespace rpg_odroid_io
 {
-GPIO::GPIO() : fd_value_(-1), num_gpio_(-1), direction_(0)
+GPIO::GPIO() :
+    fd_value_(-1), num_gpio_(-1), direction_(0)
 {
 }
 
-GPIO::GPIO(int gpio, int dir) : fd_value_(-1), num_gpio_(-1), direction_(0)
+GPIO::GPIO(int gpio, int dir) :
+    fd_value_(-1), num_gpio_(-1), direction_(0)
 {
   gpioSetup(gpio, dir);
 }
@@ -44,7 +46,7 @@ int GPIO::gpioSetup(int gpio, int dir)
   // apply. So we will retry writing the direction for 2 seconds before
   // giving up.
   const size_t max_attempts = 10000;
-  const size_t attempt_timeout_s = 2;  // Timeout in seconds
+  const size_t attempt_timeout_s = 2; // Timeout in seconds
   for (size_t attempt = 0; attempt <= max_attempts; attempt++)
   {
     if (!gpioSetDir_(gpio, dir))
@@ -68,7 +70,14 @@ int GPIO::gpioSetup(int gpio, int dir)
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", num_gpio_);
 
-  fd_value_ = open(buf, O_WRONLY);
+  if (direction_ == GPIO_IN)
+  {
+    fd_value_ = open(buf, O_RDONLY);
+  }
+  else
+  {
+    fd_value_ = open(buf, O_WRONLY);
+  }
   if (fd_value_ < 0)
   {
     perror("gpio/init: Value");
@@ -293,4 +302,4 @@ int GPIO::gpioClose()
   return 0;
 }
 
-}  // namespace rpg_odroid_io
+} // namespace rpg_odroid_io
