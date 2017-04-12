@@ -14,7 +14,7 @@ enum class GpioDirection
 
 enum class GpioEdge
 {
-  Rising, Falling, Both
+  None, Rising, Falling, Both
 };
 
 enum class GpioValue
@@ -40,6 +40,7 @@ public:
   int gpioGetFd() const;
   int gpioGetGpioNum() const;
   GpioDirection gpioGetDirection() const;
+  GpioEdge gpioGetEdge() const;
 
   int gpioClose();
 
@@ -54,6 +55,7 @@ private:
   int fd_value_;
   int num_gpio_;
   GpioDirection direction_;
+  GpioEdge edge_;
 
 }; // END class GPIO
 

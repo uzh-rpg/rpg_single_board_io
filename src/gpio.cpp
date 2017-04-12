@@ -10,18 +10,18 @@
 namespace rpg_odroid_io
 {
 GPIO::GPIO() :
-    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In)
+    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
 {
 }
 
 GPIO::GPIO(const int gpio, const GpioDirection dir) :
-    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In)
+    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
 {
   gpioSetup(gpio, dir);
 }
 
 GPIO::GPIO(const int gpio, const GpioEdge edge) :
-    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In)
+    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
 {
   gpioSetup(gpio, edge);
 }
@@ -75,6 +75,13 @@ int GPIO::gpioSetup(const int gpio, const GpioEdge edge)
     return -1;
   }
   direction_ = GpioDirection::In;
+
+  if (gpioSetEdge(edge) < 0)
+  {
+    perror("gpio/init: edge");
+    return -1;
+  }
+  edge_ = edge;
 
   if (gpioOpen() < 0)
   {
@@ -167,6 +174,11 @@ GpioDirection GPIO::gpioGetDirection() const
   return direction_;
 }
 
+GpioEdge GPIO::gpioGetEdge() const
+{
+  return edge_;
+}
+
 int GPIO::gpioClose()
 {
   if (num_gpio_ != -1)
@@ -180,6 +192,9 @@ int GPIO::gpioClose()
     close(fd_value_);
     fd_value_ = -1;
   }
+
+  direction_ = GpioDirection::In;
+  edge_ = GpioEdge::None;
 
   return 0;
 }
@@ -329,7 +344,8 @@ int GPIO::gpioSetEdge(const GpioEdge edge) const
   {
     if (write(fd, edge_name.c_str(), edge_name.length() + 1) >= 0)
     {
-      return -1;
+      // Edge set successfully
+      break;
     }
 
     // Chill for a moment
