@@ -1,10 +1,11 @@
 #pragma once
 
+#define SYSFS_GPIO_DIR "/sys/class/gpio"
+
 namespace rpg_odroid_io
 {
 
-#define SYSFS_GPIO_DIR "/sys/class/gpio"
-#define MAX_BUF 64
+static constexpr int kMaxBufLen = 64;
 
 enum class GpioDirection
 {

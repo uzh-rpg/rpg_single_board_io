@@ -187,7 +187,7 @@ int GPIO::gpioClose()
 int GPIO::gpioExport(const unsigned int gpio) const
 {
   int fd, len;
-  char buf[MAX_BUF];
+  char buf[kMaxBufLen];
 
   fd = open(SYSFS_GPIO_DIR "/export", O_WRONLY);
   if (fd < 0)
@@ -218,7 +218,7 @@ int GPIO::gpioExport(const unsigned int gpio) const
 int GPIO::gpioUnexport(const unsigned int gpio) const
 {
   int fd, len;
-  char buf[MAX_BUF];
+  char buf[kMaxBufLen];
 
   fd = open(SYSFS_GPIO_DIR "/unexport", O_WRONLY);
   if (fd < 0)
@@ -243,7 +243,7 @@ int GPIO::gpioUnexport(const unsigned int gpio) const
 int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
 {
   int fd;
-  char buf[MAX_BUF];
+  char buf[kMaxBufLen];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio);
 
@@ -295,7 +295,7 @@ int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
 int GPIO::gpioSetEdge(const GpioEdge edge) const
 {
   int fd;
-  char buf[MAX_BUF];
+  char buf[kMaxBufLen];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", num_gpio_);
 
@@ -349,7 +349,7 @@ int GPIO::gpioSetEdge(const GpioEdge edge) const
 
 int GPIO::gpioOpen()
 {
-  char buf[MAX_BUF];
+  char buf[kMaxBufLen];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", num_gpio_);
 
