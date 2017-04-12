@@ -35,21 +35,21 @@ int GPIO::gpioSetup(const int gpio, const GpioDirection dir)
 {
   gpioUnexport(gpio);
 
-  if (gpioExport(gpio))
+  if (gpioExport(gpio) < 0)
   {
     perror("gpio/init: export");
     return -1;
   }
   num_gpio_ = gpio;
 
-  if (!gpioSetDir(gpio, dir))
+  if (gpioSetDir(gpio, dir) < 0)
   {
     perror("gpio/init: direction");
     return -1;
   }
   direction_ = dir;
 
-  if (gpioOpen())
+  if (gpioOpen() < 0)
   {
     perror("gpio/init: open");
     return -1;
@@ -62,21 +62,21 @@ int GPIO::gpioSetup(const int gpio, const GpioEdge edge)
 {
   gpioUnexport(gpio);
 
-  if (gpioExport(gpio))
+  if (gpioExport(gpio) < 0)
   {
     perror("gpio/init: export");
     return -1;
   }
   num_gpio_ = gpio;
 
-  if (!gpioSetDir(gpio, GpioDirection::In))
+  if (gpioSetDir(gpio, GpioDirection::In) < 0)
   {
     perror("gpio/init: direction");
     return -1;
   }
   direction_ = GpioDirection::In;
 
-  if (gpioOpen())
+  if (gpioOpen() < 0)
   {
     perror("gpio/init: open");
     return -1;
