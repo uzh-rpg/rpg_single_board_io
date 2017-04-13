@@ -39,6 +39,7 @@ public:
   GpioEdge gpioGetEdge() const;
 
 private:
+
   int gpioSetup(const unsigned int gpio, const GpioDirection dir);
   int gpioSetup(const unsigned int gpio, const GpioEdge edge);
 

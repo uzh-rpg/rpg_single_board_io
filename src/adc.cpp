@@ -117,7 +117,7 @@ int ADCReader::adcReadScaled(double& value) const
     return -1;
   }
 
-  value = raw_value / double(4095) * 1.8 * (voltage_divider_upper_res_ + voltage_divider_lower_res_)
+  value = raw_value / double(kMaxAdcValue) * kMaxAdcVoltage * (voltage_divider_upper_res_ + voltage_divider_lower_res_)
       / voltage_divider_lower_res_;
 
   return 0;
@@ -135,11 +135,11 @@ int ADCReader::adcConnect(const unsigned int adc_id)
 
   if (adc_id == 0)
   {
-    adc_path = "/sys/devices/12d10000.adc/iio:device0/in_voltage0_raw";
+    adc_path = XU4_ADC0_PATH;
   }
   if (adc_id == 3)
   {
-    adc_path = "/sys/devices/12d10000.adc/iio:device0/in_voltage3_raw";
+    adc_path = XU4_ADC3_PATH;
   }
 
   fd_ = open(adc_path.c_str(), O_RDONLY);
