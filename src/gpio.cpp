@@ -1,26 +1,22 @@
 #include <errno.h>
 #include <fcntl.h>
-#include <poll.h>
-#include <rpg_odroid_io/gpio.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <unistd.h>
 
+#include <rpg_odroid_io/gpio.h>
+
 namespace rpg_odroid_io
 {
-GPIO::GPIO() :
-    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
-{
-}
 
-GPIO::GPIO(const int gpio, const GpioDirection dir) :
+GPIO::GPIO(const unsigned int gpio, const GpioDirection dir) :
     fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
 {
   gpioSetup(gpio, dir);
 }
 
-GPIO::GPIO(const int gpio, const GpioEdge edge) :
+GPIO::GPIO(const unsigned int gpio, const GpioEdge edge) :
     fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
 {
   gpioSetup(gpio, edge);
@@ -31,7 +27,7 @@ GPIO::~GPIO()
   gpioClose();
 }
 
-int GPIO::gpioSetup(const int gpio, const GpioDirection dir)
+int GPIO::gpioSetup(const unsigned int gpio, const GpioDirection dir)
 {
   gpioUnexport(gpio);
 
@@ -58,7 +54,7 @@ int GPIO::gpioSetup(const int gpio, const GpioDirection dir)
   return 0;
 }
 
-int GPIO::gpioSetup(const int gpio, const GpioEdge edge)
+int GPIO::gpioSetup(const unsigned int gpio, const GpioEdge edge)
 {
   gpioUnexport(gpio);
 
@@ -179,26 +175,6 @@ GpioEdge GPIO::gpioGetEdge() const
   return edge_;
 }
 
-int GPIO::gpioClose()
-{
-  if (num_gpio_ != -1)
-  {
-    gpioUnexport(num_gpio_);
-    num_gpio_ = -1;
-  }
-
-  if (fd_value_ > -1)
-  {
-    close(fd_value_);
-    fd_value_ = -1;
-  }
-
-  direction_ = GpioDirection::In;
-  edge_ = GpioEdge::None;
-
-  return 0;
-}
-
 int GPIO::gpioExport(const unsigned int gpio) const
 {
   int fd, len;
@@ -269,10 +245,10 @@ int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
   }
 
   // After exporting the GPIO pin, udev rules (if used) need a moment to
-  // apply. So we will retry writing the direction for 2 seconds before
-  // giving up.
-  const size_t max_attempts = 10000;
-  const size_t attempt_timeout_s = 2; // Timeout in seconds
+  // apply. So we will retry writing the direction for about 2 seconds
+  // before giving up.
+  const size_t max_attempts = 2000;
+  const size_t sleep_between_attempts = 1000; // [microseconds]
   for (size_t attempt = 0; attempt <= max_attempts; attempt++)
   {
     if (dir == GpioDirection::Out)
@@ -293,9 +269,9 @@ int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
     }
 
     // Chill for a moment
-    usleep(attempt_timeout_s * 1000000 / max_attempts);
+    usleep(sleep_between_attempts);
 
-    if (attempt == max_attempts)
+    if (attempt >= max_attempts)
     {
       return -1;
     }
@@ -336,10 +312,10 @@ int GPIO::gpioSetEdge(const GpioEdge edge) const
   }
 
   // After exporting the GPIO pin, udev rules (if used) need a moment to
-  // apply. So we will retry writing the direction for 2 seconds before
-  // giving up.
-  const size_t max_attempts = 10000;
-  const size_t attempt_timeout_s = 2; // Timeout in seconds
+  // apply. So we will retry writing the direction for about 2 seconds
+  // before giving up.
+  const size_t max_attempts = 2000;
+  const size_t sleep_between_attempts = 1000; // [microseconds]
   for (size_t attempt = 0; attempt <= max_attempts; attempt++)
   {
     if (write(fd, edge_name.c_str(), edge_name.length() + 1) >= 0)
@@ -349,9 +325,9 @@ int GPIO::gpioSetEdge(const GpioEdge edge) const
     }
 
     // Chill for a moment
-    usleep(attempt_timeout_s * 1000000 / max_attempts);
+    usleep(sleep_between_attempts);
 
-    if (attempt == max_attempts)
+    if (attempt >= max_attempts)
     {
       return -1;
     }
@@ -382,6 +358,26 @@ int GPIO::gpioOpen()
     perror("gpio/init: Value");
     return fd_value_;
   }
+
+  return 0;
+}
+
+int GPIO::gpioClose()
+{
+  if (num_gpio_ != -1)
+  {
+    gpioUnexport(num_gpio_);
+    num_gpio_ = -1;
+  }
+
+  if (fd_value_ > -1)
+  {
+    close(fd_value_);
+    fd_value_ = -1;
+  }
+
+  direction_ = GpioDirection::In;
+  edge_ = GpioEdge::None;
 
   return 0;
 }

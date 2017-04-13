@@ -25,13 +25,12 @@ enum class GpioValue
 class GPIO
 {
 public:
-  GPIO();
-  GPIO(const int gpio, const GpioDirection dir);
-  GPIO(const int gpio, const GpioEdge edge);
+  GPIO(const unsigned int gpio, const GpioDirection dir);
+  GPIO(const unsigned int gpio, const GpioEdge edge);
   ~GPIO();
 
-  int gpioSetup(const int gpio, const GpioDirection dir);
-  int gpioSetup(const int gpio, const GpioEdge edge);
+  int gpioSetup(const unsigned int gpio, const GpioDirection dir);
+  int gpioSetup(const unsigned int gpio, const GpioEdge edge);
 
   int gpioSetValue(const GpioValue value) const;
   int gpioGetValue(GpioValue *value) const;
@@ -42,8 +41,6 @@ public:
   GpioDirection gpioGetDirection() const;
   GpioEdge gpioGetEdge() const;
 
-  int gpioClose();
-
 private:
   int gpioExport(const unsigned int gpio) const;
   int gpioUnexport(const unsigned int gpio) const;
@@ -51,6 +48,7 @@ private:
   int gpioSetEdge(const GpioEdge edge) const;
 
   int gpioOpen();
+  int gpioClose();
 
   int fd_value_;
   int num_gpio_;
