@@ -29,9 +29,6 @@ public:
   GPIO(const unsigned int gpio, const GpioEdge edge);
   ~GPIO();
 
-  int gpioSetup(const unsigned int gpio, const GpioDirection dir);
-  int gpioSetup(const unsigned int gpio, const GpioEdge edge);
-
   int gpioSetValue(const GpioValue value) const;
   int gpioGetValue(GpioValue *value) const;
 
@@ -42,6 +39,9 @@ public:
   GpioEdge gpioGetEdge() const;
 
 private:
+  int gpioSetup(const unsigned int gpio, const GpioDirection dir);
+  int gpioSetup(const unsigned int gpio, const GpioEdge edge);
+
   int gpioExport(const unsigned int gpio) const;
   int gpioUnexport(const unsigned int gpio) const;
   int gpioSetDir(const unsigned int gpio, const GpioDirection dir) const;
