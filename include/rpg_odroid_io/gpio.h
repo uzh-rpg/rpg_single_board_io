@@ -41,8 +41,8 @@ public:
 
   int gpioSetup(const unsigned int gpio, const GpioDirection dir);
   int gpioSetup(const unsigned int gpio, const GpioEdge edge);
+  
 private:
-
   int gpioExport(const unsigned int gpio) const;
   int gpioUnexport(const unsigned int gpio) const;
   int gpioSetDir(const unsigned int gpio, const GpioDirection dir) const;

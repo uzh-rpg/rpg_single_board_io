@@ -21,6 +21,11 @@ ADCReader::ADCReader(const unsigned int adc_id, const double upper_res, const do
   adcSetup(adc_id, upper_res, lower_res);
 }
 
+ADCReader::ADCReader() :
+    fd_(-1), voltage_divider_upper_res_(0.0), voltage_divider_lower_res_(0.0)
+{
+}
+
 ADCReader::~ADCReader()
 {
   adcDisconnect();
@@ -47,12 +52,19 @@ int ADCReader::adcSetup(const unsigned int adc_id, const double upper_res, const
   {
     return -1;
   }
-
+  
+  is_setup_ = true;
   return 0;
 }
 
+
 int ADCReader::setVoltageDividerValues(const double upper_res, const double lower_res)
 {
+  if (!is_setup_){
+    perror("ADC has not been setup!");
+    return -1;
+  }
+  
   if (upper_res <= 0.0 || lower_res <= 0.0)
   {
     perror("Voltage divider resistor values must be strictly positive!");
@@ -67,6 +79,11 @@ int ADCReader::setVoltageDividerValues(const double upper_res, const double lowe
 
 int ADCReader::adcReadRaw(unsigned int& value) const
 {
+  if (!is_setup_){
+    perror("ADC has not been setup!");
+    return -1;
+  }
+  
   if (fd_ < 0)
   {
     perror("ADC is not open");
@@ -104,6 +121,11 @@ int ADCReader::adcReadRaw(unsigned int& value) const
 
 int ADCReader::adcReadScaled(double& value) const
 {
+  if (!is_setup_){
+    perror("ADC has not been setup!");
+    return -1;
+  }
+  
   unsigned int raw_value;
   if (adcReadRaw(raw_value) < 0)
   {
@@ -125,6 +147,11 @@ int ADCReader::adcReadScaled(double& value) const
 
 int ADCReader::adcConnect(const unsigned int adc_id)
 {
+  if (!is_setup_){
+    perror("ADC has not been setup!");
+    return -1;
+  }
+  
   if (adc_id != 0 && adc_id != 3)
   {
     perror("On the Odroid XU4, the ADC ID must be either 0 or 3!");
@@ -154,6 +181,11 @@ int ADCReader::adcConnect(const unsigned int adc_id)
 
 int ADCReader::adcDisconnect()
 {
+  if (!is_setup_){
+    perror("ADC has not been setup!");
+    return -1;
+  }
+  
   if (fd_ > -1)
   {
     close(fd_);
