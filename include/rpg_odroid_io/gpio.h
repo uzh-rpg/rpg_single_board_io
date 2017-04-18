@@ -1,56 +1,60 @@
-/*
- * gpio.h
- *
- *  Created on: 6 Aug 2015
- *  Author: Raphael Meyer
- */
+#pragma once
 
-#ifndef GPIO_H_
-#define GPIO_H_
-
-/****************************************************************
-* Constants
-****************************************************************/
 #define SYSFS_GPIO_DIR "/sys/class/gpio"
-#define POLL_TIMEOUT (3 * 1000) /* 3 seconds */
-
-#define MAX_BUF 64
-
-#define T_CAPTURE_MARGIN 300
-
-#define GPIO_OUT 1
-#define GPIO_IN 0
 
 namespace rpg_odroid_io
 {
+
+static constexpr int kMaxBufLen = 64;
+
+enum class GpioDirection
+{
+  Unset, In, Out
+};
+
+enum class GpioEdge
+{
+  None, Rising, Falling, Both
+};
+
+enum class GpioValue
+{
+  High, Low
+};
+
 class GPIO
 {
 public:
-  GPIO();
-  GPIO(int gpio, int dir);
+  GPIO(const unsigned int gpio, const GpioDirection dir);
+  GPIO(const unsigned int gpio, const GpioEdge edge);
+  GPIO();  // gpioSetup needs to be called manually
   ~GPIO();
 
-  int gpioSetup(int gpio, int dir);
-  bool gpioIsOpen();
+  int gpioSetValue(const GpioValue value) const;
+  int gpioGetValue(GpioValue *value) const;
 
-  int gpioSetValue(unsigned int value);
-  int gpioGetValue(unsigned int *value);
+  bool gpioIsOpen() const;
+  int gpioGetFd() const;
+  int gpioGetGpioNum() const;
+  GpioDirection gpioGetDirection() const;
+  GpioEdge gpioGetEdge() const;
 
-  int gpioSetEdge(char *edge);
-  int gpioGetFd();
-  int gpioClose();
-
+  int gpioSetup(const unsigned int gpio, const GpioDirection dir);
+  int gpioSetup(const unsigned int gpio, const GpioEdge edge);
+  
 private:
-  int gpioExport_(unsigned int gpio);
-  int gpioUnexport_(unsigned int gpio);
-  int gpioSetDir_(unsigned int gpio, int dir);
+  int gpioExport(const unsigned int gpio) const;
+  int gpioUnexport(const unsigned int gpio) const;
+  int gpioSetDir(const unsigned int gpio, const GpioDirection dir) const;
+  int gpioSetEdge(const GpioEdge edge) const;
+
+  int gpioOpen();
+  int gpioClose();
 
   int fd_value_;
   int num_gpio_;
-  int direction_;
+  GpioDirection direction_;
+  GpioEdge edge_;
+}; // END class GPIO
 
-};  // END class GPIO
-
-};  // END NAMESPACE rpg_odroid_io
-
-#endif
+}// END NAMESPACE rpg_odroid_io
