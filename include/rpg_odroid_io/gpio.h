@@ -52,7 +52,7 @@ private:
   int gpioClose();
 
   int fd_value_;
-  unsigned int num_gpio_;
+  int num_gpio_;
   GpioDirection direction_;
   GpioEdge edge_;
 }; // END class GPIO
