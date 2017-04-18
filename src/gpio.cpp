@@ -22,6 +22,11 @@ GPIO::GPIO(const unsigned int gpio, const GpioEdge edge) :
   gpioSetup(gpio, edge);
 }
 
+GPIO::GPIO() :
+    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::Unset), edge_(GpioEdge::None)
+{
+}
+
 GPIO::~GPIO()
 {
   gpioClose();
@@ -95,7 +100,7 @@ int GPIO::gpioSetValue(const GpioValue value) const
     return fd_value_;
   }
 
-  if (direction_ == GpioDirection::In)
+  if (direction_ != GpioDirection::Out )
   {
     perror("gpio/set-value");
     return -1;
@@ -126,6 +131,12 @@ int GPIO::gpioGetValue(GpioValue *value) const
   if (fd_value_ < 0)
   {
     return fd_value_;
+  }
+  
+  if (direction_ != GpioDirection::In )
+  {
+    perror("gpio/get-value");
+    return -1;
   }
 
   if (read(fd_value_, &ch, 1) < 0)
