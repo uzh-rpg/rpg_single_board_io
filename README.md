@@ -27,3 +27,15 @@ or simply reboot the odroid.
 Use with Odroid U3
 ------------------
 TODO
+
+Alternative
+-----------
+
+To give a single executable root privileges you can do the following steps:
+
+```
+cd catkin_ws/devel/lib/YOUR_PACKAGE
+sudo chown root:root YOUR_EXECUTABLE && sudo chmod a+rx YOUR_EXECUTABLE && sudo chmod u+s YOUR_EXECUTABLE
+```
+
+**Note:** You have to redo this step each time you recompile the executable
