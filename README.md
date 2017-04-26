@@ -1,6 +1,11 @@
 GPIO Library
 ============
 
+Attention!!!
+------------
+
+Odroids use 1.8V for all teir IO signals, so make sure that you use a level shifter (e.g. [this one](https://www.digikey.ch/product-detail/de/sparkfun-electronics/BOB-11771/1568-1208-ND/5673794)) when using GPIOs with external signals of different voltage levels and use an appropriate [voltage divider](https://en.wikipedia.org/wiki/Voltage_divider) when using an ADC port!
+
 Use with odroid XU3/XU4
 -----------------------
 For GPIO pins to be used, they need to be exported with `echo $PIN_NUMBER > /sys/class/gpio/export`. This is taken care of by rpg_odroid_io. However, the newly exported GPIO pins have their permissions set to root-access only. We can change that by adding
