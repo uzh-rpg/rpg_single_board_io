@@ -1,11 +1,11 @@
+#include "rpg_odroid_io/gpio.h"
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <unistd.h>
-
-#include <rpg_odroid_io/gpio.h>
 
 namespace rpg_odroid_io
 {
@@ -100,7 +100,7 @@ int GPIO::gpioSetValue(const GpioValue value) const
     return fd_value_;
   }
 
-  if (direction_ != GpioDirection::Out )
+  if (direction_ != GpioDirection::Out)
   {
     perror("gpio/set-value");
     return -1;
@@ -120,7 +120,6 @@ int GPIO::gpioSetValue(const GpioValue value) const
       return -1;
     }
   }
-  // printf("Set value successful successful!\n\r");
 
   return 0;
 }
@@ -132,8 +131,8 @@ int GPIO::gpioGetValue(GpioValue *value) const
   {
     return fd_value_;
   }
-  
-  if (direction_ != GpioDirection::In )
+
+  if (direction_ != GpioDirection::In)
   {
     perror("gpio/get-value");
     return -1;

@@ -27,7 +27,7 @@ class GPIO
 public:
   GPIO(const unsigned int gpio, const GpioDirection dir);
   GPIO(const unsigned int gpio, const GpioEdge edge);
-  GPIO();  // gpioSetup needs to be called manually
+  GPIO(); // gpioSetup needs to be called manually
   ~GPIO();
 
   int gpioSetValue(const GpioValue value) const;
@@ -41,7 +41,7 @@ public:
 
   int gpioSetup(const unsigned int gpio, const GpioDirection dir);
   int gpioSetup(const unsigned int gpio, const GpioEdge edge);
-  
+
 private:
   int gpioExport(const unsigned int gpio) const;
   int gpioUnexport(const unsigned int gpio) const;
@@ -55,6 +55,6 @@ private:
   int num_gpio_;
   GpioDirection direction_;
   GpioEdge edge_;
-}; // END class GPIO
+};
 
-}// END NAMESPACE rpg_odroid_io
+} // namespace rpg_odroid_io
