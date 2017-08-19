@@ -55,8 +55,9 @@ int main(int argc, char **argv)
       // Get to start of file and read it
       // This is necessary for the next interrupt event to be detected properly
       lseek(fdset[0].fd, 0, SEEK_SET);
-      char buf[rpg_odroid_io::kMaxBufLen];
-      len = read(fdset[0].fd, buf, rpg_odroid_io::kMaxBufLen);
+      const int max_buf_length = 64;
+      char buf[max_buf_length];
+      len = read(fdset[0].fd, buf, max_buf_length);
 
       ROS_INFO("[%s] GPIO Interrupt detected.", ros::this_node::getName().c_str());
     }

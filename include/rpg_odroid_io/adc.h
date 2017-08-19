@@ -19,11 +19,6 @@ enum class BoardNames
   None, Odroid, Up
 };
 
-static constexpr int kMaxAdcValueOdroid = 4095;
-static constexpr int kMaxAdcValueUp = 255;
-static constexpr double kMaxAdcVoltageOdroid = 1.8;
-static constexpr double kMaxAdcVoltageUp = 3.3;
-
 class ADCReader
 {
 public:
@@ -45,6 +40,12 @@ private:
   int fd_;
   BoardNames board_name_;
   bool is_setup_ = false;
+
+  // Constants
+  static constexpr int kMaxAdcValueOdroid_ = 4095;
+  static constexpr int kMaxAdcValueUp_ = 255;
+  static constexpr double kMaxAdcVoltageOdroid_ = 1.8;
+  static constexpr double kMaxAdcVoltageUp_ = 3.3;
 };
 
 } // namespace rpg_odroid_io

@@ -87,9 +87,9 @@ int ADCReader::getMaxAdcValue()
   switch (board_name_)
   {
     case BoardNames::Odroid:
-      return kMaxAdcValueOdroid;
+      return kMaxAdcValueOdroid_;
     case BoardNames::Up:
-      return kMaxAdcValueUp;
+      return kMaxAdcValueUp_;
     case BoardNames::None:
     default:
       return -1;
@@ -101,9 +101,9 @@ double ADCReader::getMaxAdcVoltage()
   switch (board_name_)
   {
     case BoardNames::Odroid:
-      return kMaxAdcVoltageOdroid;
+      return kMaxAdcVoltageOdroid_;
     case BoardNames::Up:
-      return kMaxAdcVoltageUp;
+      return kMaxAdcVoltageUp_;
     case BoardNames::None:
     default:
       return 0.0;

@@ -5,8 +5,6 @@
 namespace rpg_odroid_io
 {
 
-static constexpr int kMaxBufLen = 64;
-
 enum class GpioDirection
 {
   Unset, In, Out
@@ -55,6 +53,9 @@ private:
   int num_gpio_;
   GpioDirection direction_;
   GpioEdge edge_;
+
+  // Constants
+  static constexpr int kMaxBufLen_ = 64;
 };
 
 } // namespace rpg_odroid_io

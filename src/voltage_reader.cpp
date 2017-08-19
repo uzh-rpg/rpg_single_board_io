@@ -19,6 +19,7 @@ VoltageReader::VoltageReader()
     ros::shutdown();
   }
 
+  // After successful setting up the ADC we can read the board specific parameters
   max_adc_value_ = adc_reader_.getMaxAdcValue();
   max_adc_voltage_ = adc_reader_.getMaxAdcVoltage();
 
