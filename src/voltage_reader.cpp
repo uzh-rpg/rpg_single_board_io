@@ -13,7 +13,7 @@ VoltageReader::VoltageReader()
     ros::shutdown();
   }
 
-  if (!adc_reader_.adcSetup(board_name_, adc_id_))
+  if (adc_reader_.adcSetup(board_name_, adc_id_) < 0)
   {
     ROS_ERROR("[%s] Could not set up ADC", ros::this_node::getName().c_str());
     ros::shutdown();
@@ -36,7 +36,7 @@ VoltageReader::~VoltageReader()
 void VoltageReader::readVoltage(const ros::TimerEvent& time)
 {
   unsigned int raw_adc_value;
-  if (!adc_reader_.adcReadRaw(&raw_adc_value))
+  if (adc_reader_.adcReadRaw(&raw_adc_value) < 0)
   {
     ROS_ERROR_THROTTLE(1.0, "[%s] Could not read ADC", ros::this_node::getName().c_str());
   }
