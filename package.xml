@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-	<name>rpg_odroid_io</name>
+	<name>rpg_single_board_io</name>
 	<version>0.0.0</version>
-	<description>The GPIO package for odroids</description>
+	<description>A package for using ADCs and GPIOs on single board computers</description>
 	
 	<maintainer email="todo@todo.com">todo</maintainer>
 	<license>GNU GPL</license>

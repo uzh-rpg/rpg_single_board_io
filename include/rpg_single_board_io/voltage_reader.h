@@ -2,9 +2,9 @@
 
 #include <ros/ros.h>
 
-#include "rpg_odroid_io/adc.h"
+#include "rpg_single_board_io/adc.h"
 
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
 class VoltageReader
@@ -36,4 +36,4 @@ private:
   double voltage_divider_lower_res_;
 };
 
-} // namespace rpg_odroid_io
+} // namespace rpg_single_board_io

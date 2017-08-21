@@ -1,4 +1,4 @@
-#include "rpg_odroid_io/gpio.h"
+#include "rpg_single_board_io/gpio.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -7,7 +7,7 @@
 #include <string>
 #include <unistd.h>
 
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
 GPIO::GPIO(const unsigned int gpio, const GpioDirection dir) :
@@ -392,4 +392,4 @@ int GPIO::gpioClose()
   return 0;
 }
 
-} // namespace rpg_odroid_io
+} // namespace rpg_single_board_io

@@ -1,10 +1,10 @@
-#include "rpg_odroid_io/adc.h"
+#include "rpg_single_board_io/adc.h"
 
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
 
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
 ADCReader::ADCReader(const std::string& board_name, const unsigned int adc_id) :
@@ -191,4 +191,4 @@ int ADCReader::adcDisconnect()
   return 0;
 }
 
-} // namespace rpg_odroid_io
+} // namespace rpg_single_board_io

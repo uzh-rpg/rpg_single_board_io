@@ -5,7 +5,7 @@
 
 #include <ros/ros.h>
 
-#include <rpg_odroid_io/gpio.h>
+#include <rpg_single_board_io/gpio.h>
 
 int main(int argc, char **argv)
 {
@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   const unsigned int num_gpio = 25; // Example GPIO for Odroid XU4
   //const unsigned int num_gpio = 200; // Example GPIO for Odroid U3
 
-  rpg_odroid_io::GPIO gpio(num_gpio, rpg_odroid_io::GpioEdge::Rising);
+  rpg_single_board_io::GPIO gpio(num_gpio, rpg_single_board_io::GpioEdge::Rising);
 
   if (!gpio.gpioIsOpen())
   {

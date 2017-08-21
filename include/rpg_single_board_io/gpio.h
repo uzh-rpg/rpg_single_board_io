@@ -2,7 +2,7 @@
 
 #define SYSFS_GPIO_DIR "/sys/class/gpio"
 
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
 enum class GpioDirection
@@ -58,4 +58,4 @@ private:
   static constexpr int kMaxBufLen_ = 64;
 };
 
-} // namespace rpg_odroid_io
+} // namespace rpg_single_board_io

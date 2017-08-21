@@ -8,7 +8,7 @@
 
 #define UP_ADC_PATH "/sys/bus/iio/devices/iio:device0/in_voltage_raw"
 
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
 class ADCReader
@@ -44,4 +44,4 @@ private:
   static constexpr double kMaxAdcVoltageUp_ = 3.3;
 };
 
-} // namespace rpg_odroid_io
+} // namespace rpg_single_board_io

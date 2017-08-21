@@ -1,8 +1,8 @@
-#include "rpg_odroid_io/voltage_reader.h"
+#include "rpg_single_board_io/voltage_reader.h"
 
 #include <std_msgs/Float32.h>
 
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
 VoltageReader::VoltageReader()
@@ -85,12 +85,12 @@ bool VoltageReader::loadParameters()
   return true;
 }
 
-}
+} // namespace rpg_single_board_io
 
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "voltage_reader");
-  rpg_odroid_io::VoltageReader voltage_reader;
+  rpg_single_board_io::VoltageReader voltage_reader;
 
   ros::spin();
 
