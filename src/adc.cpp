@@ -14,7 +14,7 @@ ADCReader::ADCReader(const std::string& board_name, const unsigned int adc_id) :
 }
 
 ADCReader::ADCReader() :
-    board_name_(BoardNames::None), fd_(-1)
+    board_name_(BoardNames::NONE), fd_(-1)
 {
 }
 
@@ -86,11 +86,11 @@ int ADCReader::getMaxAdcValue()
 {
   switch (board_name_)
   {
-    case BoardNames::Odroid:
+    case BoardNames::ODROID:
       return kMaxAdcValueOdroid_;
-    case BoardNames::Up:
+    case BoardNames::UP:
       return kMaxAdcValueUp_;
-    case BoardNames::None:
+    case BoardNames::NONE:
     default:
       return -1;
   }
@@ -100,11 +100,11 @@ double ADCReader::getMaxAdcVoltage()
 {
   switch (board_name_)
   {
-    case BoardNames::Odroid:
+    case BoardNames::ODROID:
       return kMaxAdcVoltageOdroid_;
-    case BoardNames::Up:
+    case BoardNames::UP:
       return kMaxAdcVoltageUp_;
-    case BoardNames::None:
+    case BoardNames::NONE:
     default:
       return 0.0;
   }
@@ -117,11 +117,11 @@ int ADCReader::setBoardName(const std::string& board_name)
 
   if (odroid_name.compare(board_name) == 0)
   {
-    board_name_ = BoardNames::Odroid;
+    board_name_ = BoardNames::ODROID;
   }
   else if (up_name.compare(board_name) == 0)
   {
-    board_name_ = BoardNames::Up;
+    board_name_ = BoardNames::UP;
   }
   else
   {
@@ -133,13 +133,13 @@ int ADCReader::setBoardName(const std::string& board_name)
 
 int ADCReader::adcConnect(const unsigned int adc_id)
 {
-  if (board_name_ == BoardNames::None)
+  if (board_name_ == BoardNames::NONE)
   {
     perror("Board name was not set before connecting to ADC!");
     return -1;
   }
 
-  if (board_name_ == BoardNames::Odroid && adc_id != 0 && adc_id != 3)
+  if (board_name_ == BoardNames::ODROID && adc_id != 0 && adc_id != 3)
   {
     perror("On the Odroid XU4, the ADC ID must be either 0 or 3!");
     return -1;
@@ -149,7 +149,7 @@ int ADCReader::adcConnect(const unsigned int adc_id)
 
   switch (board_name_)
   {
-    case BoardNames::Odroid:
+    case BoardNames::ODROID:
       if (adc_id == 0)
       {
         adc_path = XU4_ADC0_PATH;
@@ -159,10 +159,10 @@ int ADCReader::adcConnect(const unsigned int adc_id)
         adc_path = XU4_ADC3_PATH;
       }
       break;
-    case BoardNames::Up:
+    case BoardNames::UP:
       adc_path = UP_ADC_PATH;
       break;
-    case BoardNames::None:
+    case BoardNames::NONE:
     default:
       perror("Unknown board name set!");
       return -1;

@@ -3,8 +3,6 @@
 #include <stdint.h>
 #include <string>
 
-#include <ros/ros.h>
-
 #define XU4_ADC0_PATH "/sys/devices/12d10000.adc/iio:device0/in_voltage0_raw"
 #define XU4_ADC3_PATH "/sys/devices/12d10000.adc/iio:device0/in_voltage3_raw"
 
@@ -12,11 +10,6 @@
 
 namespace rpg_odroid_io
 {
-
-enum class BoardNames
-{
-  None, Odroid, Up
-};
 
 class ADCReader
 {
@@ -36,8 +29,12 @@ private:
   int adcConnect(const unsigned int adc_id);
   int adcDisconnect();
 
+  enum class BoardNames
+  {
+    NONE, ODROID, UP
+  } board_name_;
+
   int fd_;
-  BoardNames board_name_;
   bool is_setup_ = false;
 
   // Constants
