@@ -8,8 +8,7 @@
 #define XU4_ADC0_PATH "/sys/devices/12d10000.adc/iio:device0/in_voltage0_raw"
 #define XU4_ADC3_PATH "/sys/devices/12d10000.adc/iio:device0/in_voltage3_raw"
 
-#define UP_ADC_PATH "/sys/bus/iio/devices/iio\\:device0/in_voltage_raw"
-// /sys/bus/iio/devices/iio\\:device0/in_voltage_scale
+#define UP_ADC_PATH "/sys/bus/iio/devices/iio:device0/in_voltage_raw"
 
 namespace rpg_odroid_io
 {
