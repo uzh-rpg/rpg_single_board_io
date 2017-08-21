@@ -1,14 +1,18 @@
-GPIO Library
-============
+ADC and GPIO Library
+====================
+
+This library is tested with Hardkernel Odroid boards and Intel Up boards.
 
 Attention!!!
 ------------
 
 Odroids use 1.8V for all teir IO signals, so make sure that you use a level shifter (e.g. [this one](https://www.digikey.ch/product-detail/de/sparkfun-electronics/BOB-11771/1568-1208-ND/5673794)) when using GPIOs with external signals of different voltage levels and use an appropriate [voltage divider](https://en.wikipedia.org/wiki/Voltage_divider) when using an ADC port!
 
-Use with odroid XU3/XU4
+Intel Up boards have the signals on their pin header shifted to 3.3V. Also make sure not to exceed these values with external voltages.
+
+Use with Odroid XU3/XU4
 -----------------------
-For GPIO pins to be used, they need to be exported with `echo $PIN_NUMBER > /sys/class/gpio/export`. This is taken care of by rpg_odroid_io. However, the newly exported GPIO pins have their permissions set to root-access only. We can change that by adding
+For GPIO pins to be used, they need to be exported with `echo $PIN_NUMBER > /sys/class/gpio/export`. This is taken care of by rpg_single_board_io. However, the newly exported GPIO pins have their permissions set to root-access only. We can change that by adding
 corresponding udev rules:
 
 First create `/etc/udev/rules.d/10-gpio.rules`, for instance by using `touch`.
@@ -32,6 +36,11 @@ or simply reboot the odroid.
 Use with Odroid U3
 ------------------
 TODO
+
+Use with Up board
+-----------------
+TODO
+
 
 Alternative
 -----------

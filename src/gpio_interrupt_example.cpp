@@ -5,7 +5,7 @@
 
 #include <ros/ros.h>
 
-#include <rpg_odroid_io/gpio.h>
+#include <rpg_single_board_io/gpio.h>
 
 int main(int argc, char **argv)
 {
@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   const unsigned int num_gpio = 25; // Example GPIO for Odroid XU4
   //const unsigned int num_gpio = 200; // Example GPIO for Odroid U3
 
-  rpg_odroid_io::GPIO gpio(num_gpio, rpg_odroid_io::GpioEdge::Rising);
+  rpg_single_board_io::GPIO gpio(num_gpio, rpg_single_board_io::GpioEdge::Rising);
 
   if (!gpio.gpioIsOpen())
   {
@@ -55,8 +55,9 @@ int main(int argc, char **argv)
       // Get to start of file and read it
       // This is necessary for the next interrupt event to be detected properly
       lseek(fdset[0].fd, 0, SEEK_SET);
-      char buf[rpg_odroid_io::kMaxBufLen];
-      len = read(fdset[0].fd, buf, rpg_odroid_io::kMaxBufLen);
+      const int max_buf_length = 64;
+      char buf[max_buf_length];
+      len = read(fdset[0].fd, buf, max_buf_length);
 
       ROS_INFO("[%s] GPIO Interrupt detected.", ros::this_node::getName().c_str());
     }

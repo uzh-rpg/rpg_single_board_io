@@ -1,3 +1,5 @@
+#include "rpg_single_board_io/gpio.h"
+
 #include <errno.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -5,9 +7,7 @@
 #include <string>
 #include <unistd.h>
 
-#include <rpg_odroid_io/gpio.h>
-
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
 GPIO::GPIO(const unsigned int gpio, const GpioDirection dir) :
@@ -100,7 +100,7 @@ int GPIO::gpioSetValue(const GpioValue value) const
     return fd_value_;
   }
 
-  if (direction_ != GpioDirection::Out )
+  if (direction_ != GpioDirection::Out)
   {
     perror("gpio/set-value");
     return -1;
@@ -120,7 +120,6 @@ int GPIO::gpioSetValue(const GpioValue value) const
       return -1;
     }
   }
-  // printf("Set value successful successful!\n\r");
 
   return 0;
 }
@@ -132,8 +131,8 @@ int GPIO::gpioGetValue(GpioValue *value) const
   {
     return fd_value_;
   }
-  
-  if (direction_ != GpioDirection::In )
+
+  if (direction_ != GpioDirection::In)
   {
     perror("gpio/get-value");
     return -1;
@@ -189,7 +188,7 @@ GpioEdge GPIO::gpioGetEdge() const
 int GPIO::gpioExport(const unsigned int gpio) const
 {
   int fd, len;
-  char buf[kMaxBufLen];
+  char buf[kMaxBufLen_];
 
   fd = open(SYSFS_GPIO_DIR "/export", O_WRONLY);
   if (fd < 0)
@@ -220,7 +219,7 @@ int GPIO::gpioExport(const unsigned int gpio) const
 int GPIO::gpioUnexport(const unsigned int gpio) const
 {
   int fd, len;
-  char buf[kMaxBufLen];
+  char buf[kMaxBufLen_];
 
   fd = open(SYSFS_GPIO_DIR "/unexport", O_WRONLY);
   if (fd < 0)
@@ -245,7 +244,7 @@ int GPIO::gpioUnexport(const unsigned int gpio) const
 int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
 {
   int fd;
-  char buf[kMaxBufLen];
+  char buf[kMaxBufLen_];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/direction", gpio);
 
@@ -297,7 +296,7 @@ int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
 int GPIO::gpioSetEdge(const GpioEdge edge) const
 {
   int fd;
-  char buf[kMaxBufLen];
+  char buf[kMaxBufLen_];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/edge", num_gpio_);
 
@@ -352,7 +351,7 @@ int GPIO::gpioSetEdge(const GpioEdge edge) const
 
 int GPIO::gpioOpen()
 {
-  char buf[kMaxBufLen];
+  char buf[kMaxBufLen_];
 
   snprintf(buf, sizeof(buf), SYSFS_GPIO_DIR "/gpio%d/value", num_gpio_);
 
@@ -393,4 +392,4 @@ int GPIO::gpioClose()
   return 0;
 }
 
-} // namespace rpg_odroid_io
+} // namespace rpg_single_board_io

@@ -1,28 +1,20 @@
-#include <stdio.h>
-#include <string>
+#include "rpg_single_board_io/adc.h"
+
 #include <fcntl.h>
+#include <stdio.h>
 #include <unistd.h>
-#include <stdint.h>
 
-#include "rpg_odroid_io/adc.h"
-
-namespace rpg_odroid_io
+namespace rpg_single_board_io
 {
 
-ADCReader::ADCReader(const unsigned int adc_id) :
-    fd_(-1), voltage_divider_upper_res_(0.0), voltage_divider_lower_res_(0.0)
+ADCReader::ADCReader(const std::string& board_name, const unsigned int adc_id) :
+    fd_(-1)
 {
-  adcSetup(adc_id);
-}
-
-ADCReader::ADCReader(const unsigned int adc_id, const double upper_res, const double lower_res) :
-    fd_(-1), voltage_divider_upper_res_(0.0), voltage_divider_lower_res_(0.0)
-{
-  adcSetup(adc_id, upper_res, lower_res);
+  adcSetup(board_name, adc_id);
 }
 
 ADCReader::ADCReader() :
-    fd_(-1), voltage_divider_upper_res_(0.0), voltage_divider_lower_res_(0.0)
+    board_name_(BoardNames::NONE), fd_(-1)
 {
 }
 
@@ -31,55 +23,30 @@ ADCReader::~ADCReader()
   adcDisconnect();
 }
 
-int ADCReader::adcSetup(const unsigned int adc_id)
+int ADCReader::adcSetup(const std::string& board_name, const unsigned int adc_id)
 {
-  if (adcConnect(adc_id) < 0)
+  if (setBoardName(board_name) < 0)
   {
     return -1;
   }
-  
-  is_setup_ = true;
-  return 0;
-}
 
-int ADCReader::adcSetup(const unsigned int adc_id, const double upper_res, const double lower_res)
-{
   if (adcConnect(adc_id) < 0)
   {
     return -1;
   }
 
-  if (setVoltageDividerValues(upper_res, lower_res) < 0)
-  {
-    return -1;
-  }
-  
   is_setup_ = true;
   return 0;
 }
 
-
-int ADCReader::setVoltageDividerValues(const double upper_res, const double lower_res)
+int ADCReader::adcReadRaw(unsigned int* value) const
 {
-  if (upper_res <= 0.0 || lower_res <= 0.0)
+  if (!is_setup_)
   {
-    perror("Voltage divider resistor values must be strictly positive!");
-    return -1;
-  }
-
-  voltage_divider_upper_res_ = upper_res;
-  voltage_divider_lower_res_ = lower_res;
-
-  return 0;
-}
-
-int ADCReader::adcReadRaw(unsigned int& value) const
-{
-  if (!is_setup_){
     perror("ADC has not been setup!");
     return -1;
   }
-  
+
   if (fd_ < 0)
   {
     perror("ADC is not open");
@@ -100,7 +67,7 @@ int ADCReader::adcReadRaw(unsigned int& value) const
     }
     else if (ret == 0)
     {
-      // If we read less than 4 bytes, the last red byte seem to be rubbish
+      // If we read less than 4 bytes, the last red byte seems to be rubbish
       buf[i - 1] = 0;
       break;
     }
@@ -110,40 +77,69 @@ int ADCReader::adcReadRaw(unsigned int& value) const
     }
   }
 
-  value = atoi(buf);
+  *value = atoi(buf);
 
   return 0;
 }
 
-int ADCReader::adcReadScaled(double& value) const
+int ADCReader::getMaxAdcValue()
 {
-  if (!is_setup_){
-    perror("ADC has not been setup!");
-    return -1;
-  }
-  
-  unsigned int raw_value;
-  if (adcReadRaw(raw_value) < 0)
+  switch (board_name_)
   {
-    perror("Could not read ADC");
-    return -1;
+    case BoardNames::ODROID:
+      return kMaxAdcValueOdroid_;
+    case BoardNames::UP:
+      return kMaxAdcValueUp_;
+    case BoardNames::NONE:
+    default:
+      return -1;
   }
+}
 
-  if (voltage_divider_lower_res_ <= 1e-4)
+double ADCReader::getMaxAdcVoltage()
+{
+  switch (board_name_)
   {
-    perror("Voltage divider resistor values not set");
+    case BoardNames::ODROID:
+      return kMaxAdcVoltageOdroid_;
+    case BoardNames::UP:
+      return kMaxAdcVoltageUp_;
+    case BoardNames::NONE:
+    default:
+      return 0.0;
+  }
+}
+
+int ADCReader::setBoardName(const std::string& board_name)
+{
+  const std::string odroid_name = "odroid";
+  const std::string up_name = "up";
+
+  if (odroid_name.compare(board_name) == 0)
+  {
+    board_name_ = BoardNames::ODROID;
+  }
+  else if (up_name.compare(board_name) == 0)
+  {
+    board_name_ = BoardNames::UP;
+  }
+  else
+  {
+    perror("No valid board name provided! [odroid, up]");
     return -1;
   }
-
-  value = raw_value / double(kMaxAdcValue) * kMaxAdcVoltage * (voltage_divider_upper_res_ + voltage_divider_lower_res_)
-      / voltage_divider_lower_res_;
-
   return 0;
 }
 
 int ADCReader::adcConnect(const unsigned int adc_id)
-{  
-  if (adc_id != 0 && adc_id != 3)
+{
+  if (board_name_ == BoardNames::NONE)
+  {
+    perror("Board name was not set before connecting to ADC!");
+    return -1;
+  }
+
+  if (board_name_ == BoardNames::ODROID && adc_id != 0 && adc_id != 3)
   {
     perror("On the Odroid XU4, the ADC ID must be either 0 or 3!");
     return -1;
@@ -151,13 +147,25 @@ int ADCReader::adcConnect(const unsigned int adc_id)
 
   std::string adc_path;
 
-  if (adc_id == 0)
+  switch (board_name_)
   {
-    adc_path = XU4_ADC0_PATH;
-  }
-  if (adc_id == 3)
-  {
-    adc_path = XU4_ADC3_PATH;
+    case BoardNames::ODROID:
+      if (adc_id == 0)
+      {
+        adc_path = XU4_ADC0_PATH;
+      }
+      if (adc_id == 3)
+      {
+        adc_path = XU4_ADC3_PATH;
+      }
+      break;
+    case BoardNames::UP:
+      adc_path = UP_ADC_PATH;
+      break;
+    case BoardNames::NONE:
+    default:
+      perror("Unknown board name set!");
+      return -1;
   }
 
   fd_ = open(adc_path.c_str(), O_RDONLY);
@@ -178,10 +186,9 @@ int ADCReader::adcDisconnect()
     fd_ = -1;
   }
 
-  voltage_divider_upper_res_ = 0.0;
-  voltage_divider_lower_res_ = 0.0;
+  is_setup_ = false;
 
   return 0;
 }
 
-} // namespace rpg_odroid_io
+} // namespace rpg_single_board_io
