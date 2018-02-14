@@ -23,7 +23,8 @@ ADCReader::~ADCReader()
   adcDisconnect();
 }
 
-int ADCReader::adcSetup(const std::string& board_name, const unsigned int adc_id)
+int ADCReader::adcSetup(const std::string& board_name,
+                        const unsigned int adc_id)
 {
   if (setBoardName(board_name) < 0)
   {

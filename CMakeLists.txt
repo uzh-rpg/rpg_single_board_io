@@ -1,24 +1,16 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(rpg_single_board_io)
 
-IF(CMAKE_COMPILER_IS_GNUCC)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
-ELSE()
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-ENDIF()
+## Compile as C++11, supported in ROS Kinetic and newer
+add_compile_options(-std=c++11)
+add_compile_options(-O3)
 
 find_package(catkin_simple REQUIRED)
-catkin_simple()
+catkin_simple(ALL_DEPS_REQUIRED)
 
 cs_add_library(${PROJECT_NAME} src/gpio.cpp src/adc.cpp)
 cs_add_executable(gpio_interrupt_example src/gpio_interrupt_example.cpp src/gpio.cpp)
 cs_add_executable(voltage_reader src/voltage_reader.cpp src/adc.cpp)
 
 cs_install()
-install(DIRECTORY parameters
- DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-install(FILES nodelet_plugins.xml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-
 cs_export()
