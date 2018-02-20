@@ -10,20 +10,23 @@
 namespace rpg_single_board_io
 {
 
-GPIO::GPIO(const unsigned int gpio, const GpioDirection dir) :
-    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
+GPIO::GPIO(const unsigned int gpio, const GpioDirection& dir) :
+    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(
+        GpioEdge::None)
 {
   gpioSetup(gpio, dir);
 }
 
-GPIO::GPIO(const unsigned int gpio, const GpioEdge edge) :
-    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(GpioEdge::None)
+GPIO::GPIO(const unsigned int gpio, const GpioEdge& edge) :
+    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::In), edge_(
+        GpioEdge::None)
 {
   gpioSetup(gpio, edge);
 }
 
 GPIO::GPIO() :
-    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::Unset), edge_(GpioEdge::None)
+    fd_value_(-1), num_gpio_(-1), direction_(GpioDirection::Unset), edge_(
+        GpioEdge::None)
 {
 }
 
@@ -32,7 +35,7 @@ GPIO::~GPIO()
   gpioClose();
 }
 
-int GPIO::gpioSetup(const unsigned int gpio, const GpioDirection dir)
+int GPIO::gpioSetup(const unsigned int gpio, const GpioDirection& dir)
 {
   gpioUnexport(gpio);
 
@@ -59,7 +62,7 @@ int GPIO::gpioSetup(const unsigned int gpio, const GpioDirection dir)
   return 0;
 }
 
-int GPIO::gpioSetup(const unsigned int gpio, const GpioEdge edge)
+int GPIO::gpioSetup(const unsigned int gpio, const GpioEdge& edge)
 {
   gpioUnexport(gpio);
 
@@ -93,7 +96,7 @@ int GPIO::gpioSetup(const unsigned int gpio, const GpioEdge edge)
   return 0;
 }
 
-int GPIO::gpioSetValue(const GpioValue value) const
+int GPIO::gpioSetValue(const GpioValue& value) const
 {
   if (fd_value_ < 0)
   {
@@ -241,7 +244,7 @@ int GPIO::gpioUnexport(const unsigned int gpio) const
   return 0;
 }
 
-int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
+int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection& dir) const
 {
   int fd;
   char buf[kMaxBufLen_];
@@ -293,7 +296,7 @@ int GPIO::gpioSetDir(const unsigned int gpio, const GpioDirection dir) const
   return 0;
 }
 
-int GPIO::gpioSetEdge(const GpioEdge edge) const
+int GPIO::gpioSetEdge(const GpioEdge& edge) const
 {
   int fd;
   char buf[kMaxBufLen_];

@@ -9,7 +9,8 @@ VoltageReader::VoltageReader()
 {
   if (!loadParameters())
   {
-    ROS_ERROR("[%s] Could not load parameters", ros::this_node::getName().c_str());
+    ROS_ERROR("[%s] Could not load parameters",
+              ros::this_node::getName().c_str());
     ros::shutdown();
   }
 
@@ -19,14 +20,16 @@ VoltageReader::VoltageReader()
     ros::shutdown();
   }
 
-  // After successful setting up the ADC we can read the board specific parameters
+  // After successful setting up the ADC we can read the board specific
+  // parameters
   max_adc_value_ = adc_reader_.getMaxAdcValue();
   max_adc_voltage_ = adc_reader_.getMaxAdcVoltage();
 
   voltage_pub_ = nh_.advertise<std_msgs::Float32>("voltage_reader/voltage", 1);
 
-  read_battery_timer_ = nh_.createTimer(ros::Duration(1.0 / read_voltage_frequency_), &VoltageReader::readVoltage,
-                                        this);
+  read_battery_timer_ = nh_.createTimer(
+      ros::Duration(1.0 / read_voltage_frequency_), &VoltageReader::readVoltage,
+      this);
 }
 
 VoltageReader::~VoltageReader()
@@ -38,12 +41,15 @@ void VoltageReader::readVoltage(const ros::TimerEvent& time)
   unsigned int raw_adc_value;
   if (adc_reader_.adcReadRaw(&raw_adc_value) < 0)
   {
-    ROS_ERROR_THROTTLE(1.0, "[%s] Could not read ADC", ros::this_node::getName().c_str());
+    ROS_ERROR_THROTTLE(1.0, "[%s] Could not read ADC",
+                       ros::this_node::getName().c_str());
   }
   else
   {
-    const double voltage = double(raw_adc_value) / max_adc_value_ * max_adc_voltage_
-        * (voltage_divider_upper_res_ + voltage_divider_lower_res_) / voltage_divider_lower_res_;
+    const double voltage = double(raw_adc_value) / max_adc_value_
+        * max_adc_voltage_
+        * (voltage_divider_upper_res_ + voltage_divider_lower_res_)
+        / voltage_divider_lower_res_;
 
     std_msgs::Float32 voltage_msg;
     voltage_msg.data = voltage;
