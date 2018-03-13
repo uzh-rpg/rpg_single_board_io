@@ -1,7 +1,7 @@
 ADC and GPIO Library
 ====================
 
-This library is tested with Hardkernel Odroid boards and Intel Up boards.
+This library is tested with Hardkernel Odroid boards and Intel Up boards. It was developed at the [Robotics and Perception Group](http://www.ifi.uzh.ch/en/rpg.html) to be used within our [quadrotor framework](https://github.com/uzh-rpg/rpg_quadrotor_control).
 
 Attention!!!
 ------------
