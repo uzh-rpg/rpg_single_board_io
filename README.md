@@ -2,6 +2,7 @@ ADC and GPIO Library
 ====================
 
 This library is tested with Hardkernel Odroid boards and Intel Up boards.
+It is released under a MIT license.
 
 Attention!!!
 ------------
