@@ -40,10 +40,10 @@ TODO
 
 Use with Up board
 -----------------
-On the Up board, there are only a few points you need to check if you have issues with permissions (symptom is usually an error `Could not set necessary configuration of serial port` from the [SBUS bridge](https://github.com/uzh-rpg/rpg_quadrotor_control) )
+On the Up board, there are only a few points you need to check if you have issues with permissions (symptom is usually an error `Could not set necessary configuration of serial port` from the [SBUS bridge](https://github.com/uzh-rpg/rpg_quadrotor_control/tree/master/bridges/sbus_bridge)
 
 1.  You are using an "upboard" kernel. Check for that using `uname -a` and look for any mention of "upboard" in the kernel's name.
-      -  If not, go this page and install such a kernel: [https://wiki.up-community.org/Ubuntu](https://wiki.up-community.org/Ubuntu)
+      -  If not, go to this page and install such a kernel: [https://wiki.up-community.org/Ubuntu](https://wiki.up-community.org/Ubuntu)
    
 2.  You have set the permissions and installed the add-ons as described here: [https://wiki.up-community.org/Ubuntu#Enable_the_HAT_functionality_from_userspace](https://wiki.up-community.org/Ubuntu#Enable_the_HAT_functionality_from_userspace)
 
