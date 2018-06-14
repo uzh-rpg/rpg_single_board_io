@@ -40,7 +40,15 @@ TODO
 
 Use with Up board
 -----------------
-TODO
+On the Up board, there is only a few points you need to check if you have issue with permissions (symptom is usually an error `Could not set necessary configuration of serial port` from the SBUS bridge)
+
+1.  You are using an "upboard" kernel. Check for that using `uname -a`
+      -  If not, go this page and install such a kernel: [https://wiki.up-community.org/Ubuntu](https://wiki.up-community.org/Ubuntu)
+   
+2.  You have set the permissions and installed the add-ons as described here: [https://wiki.up-community.org/Ubuntu#Enable_the_HAT_functionality_from_userspace](https://wiki.up-community.org/Ubuntu#Enable_the_HAT_functionality_from_userspace)
+
+3.  You are using the wrong port name which is usually `/dev/ttyS1` or `/dev/ttyS4`.
+     -   Make sure that you don't overwrite the parameters you set. For the SBUS bridge for instance, the value is set in the parameters `.yaml` file but it could be overwritten in another parameter file or launch file. Thus, check the ROS info message during when you launch the node. Note that `/dev/ttyS0` is reserved for the console, so try `cat /dev/ttySX` and try the ports which do not output any error (don't use `sudo`)
 
 
 Alternative
