@@ -9,7 +9,9 @@ find_package(catkin_simple REQUIRED)
 catkin_simple(ALL_DEPS_REQUIRED)
 
 cs_add_library(${PROJECT_NAME} src/gpio.cpp src/adc.cpp)
-cs_add_executable(gpio_interrupt_example src/gpio_interrupt_example.cpp src/gpio.cpp)
+cs_add_executable(gpio_interrupt_example src/gpio_interrupt_example.cpp 
+	src/gpio.cpp)
+cs_add_executable(gpio_write_test src/gpio_write_test.cpp src/gpio.cpp)
 cs_add_executable(voltage_reader src/voltage_reader.cpp src/adc.cpp)
 
 cs_install()

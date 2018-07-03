@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+  <node pkg="rpg_single_board_io" type="gpio_write_test" 
+      name="gpio_write_test" output="screen">
+  </node>
+
+</launch>
